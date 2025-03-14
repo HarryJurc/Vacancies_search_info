@@ -41,14 +41,14 @@ class Vacancy:
         """Сравнивает вакансии по зарплате."""
         return (self.salary or 0) < (other.salary or 0)
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, Vacancy):
             return NotImplemented
         return (
-                self.title == other.title and
-                self.url == other.url and
-                self.salary == other.salary and
-                self.description == other.description
+            self.title == other.title
+            and self.url == other.url
+            and self.salary == other.salary
+            and self.description == other.description
         )
 
     @staticmethod

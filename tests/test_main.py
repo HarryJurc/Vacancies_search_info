@@ -1,7 +1,6 @@
 from unittest.mock import patch
+
 from main import user_interface
-from src.job_api import HeadHunterAPI
-from src.storage import JSONVacancyStorage
 from src.vacancy import Vacancy
 
 
@@ -11,20 +10,19 @@ def test_find_vacancies():
             "name": "Python Developer",
             "alternate_url": "http://example.com/1",
             "salary": {"from": 100000, "to": 150000, "currency": "RUR", "gross": False},
-            "snippet": {"responsibility": "Python development"}
+            "snippet": {"responsibility": "Python development"},
         },
         {
             "name": "QA Engineer",
             "alternate_url": "http://example.com/2",
             "salary": None,
-            "snippet": {"responsibility": "Testing software"}
-        }
+            "snippet": {"responsibility": "Testing software"},
+        },
     ]
 
-    with patch("builtins.input", side_effect=["1", "Python", "4"]), \
-         patch("src.job_api.HeadHunterAPI.get_vacancies", return_value=mock_vacancies), \
-         patch("src.storage.JSONVacancyStorage.save") as mock_save, \
-         patch("builtins.print") as mock_print:
+    with patch("builtins.input", side_effect=["1", "Python", "4"]), patch(
+        "src.job_api.HeadHunterAPI.get_vacancies", return_value=mock_vacancies
+    ), patch("src.storage.JSONVacancyStorage.save") as mock_save, patch("builtins.print"):
 
         user_interface()
 
@@ -33,27 +31,20 @@ def test_find_vacancies():
                 title="Python Developer",
                 url="http://example.com/1",
                 salary={"from": 100000, "to": 150000, "currency": "RUR", "gross": False},
-                description="Python development"
+                description="Python development",
             ),
-            Vacancy(
-                title="QA Engineer",
-                url="http://example.com/2",
-                salary=None,
-                description="Testing software"
-            )
+            Vacancy(title="QA Engineer", url="http://example.com/2", salary=None, description="Testing software"),
         ]
         mock_save.assert_called_once_with(expected_vacancies)
-
-
 
 
 def test_show_saved_vacancies():
     vacancy1 = Vacancy("Python Developer", "http://example.com", "100000", "Python development")
     vacancy2 = Vacancy("QA Engineer", "http://example.com/2", "Зарплата не указана", "Testing software")
 
-    with patch("builtins.input", side_effect=["2", "4"]), \
-         patch("src.storage.JSONVacancyStorage.load", return_value=[vacancy1, vacancy2]), \
-         patch("builtins.print") as mock_print:
+    with patch("builtins.input", side_effect=["2", "4"]), patch(
+        "src.storage.JSONVacancyStorage.load", return_value=[vacancy1, vacancy2]
+    ), patch("builtins.print") as mock_print:
 
         user_interface()
 
@@ -65,10 +56,9 @@ def test_delete_vacancy():
     vacancy1 = Vacancy("Python Developer", "http://example.com", "100000", "Python development")
     vacancy2 = Vacancy("QA Engineer", "http://example.com/2", "Зарплата не указана", "Testing software")
 
-    with patch("builtins.input", side_effect=["3", "Python Developer", "4"]), \
-         patch("src.storage.JSONVacancyStorage.load", return_value=[vacancy1, vacancy2]), \
-         patch("src.storage.JSONVacancyStorage.delete") as mock_delete, \
-         patch("builtins.print") as mock_print:
+    with patch("builtins.input", side_effect=["3", "Python Developer", "4"]), patch(
+        "src.storage.JSONVacancyStorage.load", return_value=[vacancy1, vacancy2]
+    ), patch("src.storage.JSONVacancyStorage.delete") as mock_delete, patch("builtins.print") as mock_print:
 
         user_interface()
 
@@ -77,8 +67,7 @@ def test_delete_vacancy():
 
 
 def test_exit_program():
-    with patch("builtins.input", side_effect=["4"]), \
-         patch("builtins.print") as mock_print:
+    with patch("builtins.input", side_effect=["4"]), patch("builtins.print") as mock_print:
 
         user_interface()
 

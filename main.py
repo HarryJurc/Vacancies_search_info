@@ -3,7 +3,7 @@ from src.storage import JSONVacancyStorage
 from src.vacancy import Vacancy
 
 
-def user_interface():
+def user_interface() -> None:
     """Функция для взаимодействия с пользователем."""
     api = HeadHunterAPI()
     storage = JSONVacancyStorage()
@@ -16,8 +16,9 @@ def user_interface():
             query = input("Введите поисковый запрос: ")
             vacancies = api.get_vacancies(query)
             vacancy_objects = [
-                Vacancy(v["name"], v["alternate_url"], v.get("salary"), v["snippet"].get("responsibility", "")) for v in
-                vacancies]
+                Vacancy(v["name"], v["alternate_url"], v.get("salary"), v["snippet"].get("responsibility", ""))
+                for v in vacancies
+            ]
             storage.save(vacancy_objects)
             print("Вакансии сохранены.")
         elif choice == "2":

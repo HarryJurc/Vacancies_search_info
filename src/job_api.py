@@ -1,16 +1,21 @@
 from abc import ABC, abstractmethod
-import requests
 from typing import List, Optional
+
+import requests
+
 
 class JobAPI(ABC):
     """Абстрактный класс для работы с API вакансий."""
+
     @abstractmethod
     def get_vacancies(self, query: str, count: int) -> List[dict]:
         """Получает список вакансий."""
         pass
 
+
 class HeadHunterAPI(JobAPI):
     """Класс для работы с API hh.ru."""
+
     _BASE_URL = "https://api.hh.ru/vacancies"
 
     def _connect_to_api(self, params: dict) -> Optional[dict]:

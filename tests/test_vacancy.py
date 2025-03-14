@@ -1,7 +1,10 @@
 import os
+
 import pytest
+
 from src.storage import JSONVacancyStorage
 from src.vacancy import Vacancy
+
 
 @pytest.fixture
 def storage():
@@ -10,12 +13,14 @@ def storage():
     if os.path.exists(file_path):
         os.remove(file_path)
 
+
 def test_save_and_load(storage):
     vacancy = Vacancy("Python Developer", "http://example.com", "100000", "Описание")
     storage.save([vacancy])
     loaded_vacancies = storage.load()
     assert len(loaded_vacancies) == 1
     assert loaded_vacancies[0].title == "Python Developer"
+
 
 def test_delete(storage):
     vacancy1 = Vacancy("Vacancy 1", "http://example.com", "50000", "Описание 1")

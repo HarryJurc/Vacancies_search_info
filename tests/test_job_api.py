@@ -1,9 +1,12 @@
 import pytest
+
 from src.job_api import HeadHunterAPI
+
 
 @pytest.fixture
 def api():
     return HeadHunterAPI()
+
 
 def test_get_vacancies(api):
     vacancies = api.get_vacancies("Python", count=5)

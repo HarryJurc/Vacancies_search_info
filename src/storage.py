@@ -8,6 +8,7 @@ from src.vacancy import Vacancy
 
 class VacancyStorage(ABC):
     """Абстрактный класс для работы с файлами."""
+
     @abstractmethod
     def save(self, vacancies: List[Vacancy]) -> None:
         """Сохраняет вакансии в файл."""
@@ -26,6 +27,7 @@ class VacancyStorage(ABC):
 
 class JSONVacancyStorage(VacancyStorage):
     """Класс для работы с JSON-файлами."""
+
     def __init__(self, file_path: str = "data/vacancies.json"):
         """Инициализирует экземпляр с указанным файлом."""
         self._file_path = file_path
@@ -41,13 +43,10 @@ class JSONVacancyStorage(VacancyStorage):
             new_vacancies[vacancy.title] = vacancy
         with open(self._file_path, "w", encoding="utf-8") as f:
             json.dump(
-                [
-                    {slot: getattr(vacancy, slot) for slot in Vacancy.__slots__}
-                    for vacancy in new_vacancies.values()
-                ],
+                [{slot: getattr(vacancy, slot) for slot in Vacancy.__slots__} for vacancy in new_vacancies.values()],
                 f,
                 ensure_ascii=False,
-                indent=4
+                indent=4,
             )
 
     def load(self) -> List[Vacancy]:
@@ -62,8 +61,9 @@ class JSONVacancyStorage(VacancyStorage):
                         title=data["_title"],
                         url=data["_url"],
                         salary=data["_salary"],
-                        description=data["_description"]
-                    ) for data in json.load(f)
+                        description=data["_description"],
+                    )
+                    for data in json.load(f)
                 ]
             except json.JSONDecodeError:
                 print("Ошибка чтения JSON файла. Он может быть поврежден или пуст.")
@@ -75,15 +75,10 @@ class JSONVacancyStorage(VacancyStorage):
 
         vacancies = [vacancy for vacancy in vacancies if vacancy.title != vacancy_title]
 
-
         with open(self._file_path, "w", encoding="utf-8") as f:
             json.dump(
-                [
-                    {slot: getattr(vacancy, slot) for slot in Vacancy.__slots__}
-                    for vacancy in vacancies
-                ],
+                [{slot: getattr(vacancy, slot) for slot in Vacancy.__slots__} for vacancy in vacancies],
                 f,
                 ensure_ascii=False,
-                indent=4
+                indent=4,
             )
-
