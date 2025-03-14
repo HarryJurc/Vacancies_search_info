@@ -18,7 +18,7 @@ class HeadHunterAPI(JobAPI):
 
     _BASE_URL = "https://api.hh.ru/vacancies"
 
-    def _connect_to_api(self, params: dict) -> Optional[dict]:
+    def __connect_to_api(self, params: dict) -> Optional[dict]:
         """Подключается к API и возвращает ответ."""
         try:
             response = requests.get(self._BASE_URL, params=params, timeout=10)
@@ -31,5 +31,5 @@ class HeadHunterAPI(JobAPI):
     def get_vacancies(self, query: str, count: int = 10) -> List[dict]:
         """Ищет вакансии по ключевому слову."""
         params = {"text": query, "per_page": count}
-        data = self._connect_to_api(params)
+        data = self.__connect_to_api(params)
         return data.get("items", []) if data else []

@@ -43,10 +43,16 @@ class JSONVacancyStorage(VacancyStorage):
             new_vacancies[vacancy.title] = vacancy
         with open(self._file_path, "w", encoding="utf-8") as f:
             json.dump(
-                [{slot: getattr(vacancy, slot) for slot in Vacancy.__slots__} for vacancy in new_vacancies.values()],
+                [
+                    {
+                        f"_Vacancy__{slot.strip('_')}": getattr(vacancy, f"_Vacancy__{slot.strip('_')}")
+                        for slot in Vacancy.__slots__
+                    }
+                    for vacancy in new_vacancies.values()
+                ],
                 f,
                 ensure_ascii=False,
-                indent=4,
+                indent=4
             )
 
     def load(self) -> List[Vacancy]:
@@ -55,30 +61,37 @@ class JSONVacancyStorage(VacancyStorage):
             return []
         with open(self._file_path, "r", encoding="utf-8") as f:
             try:
-                # Преобразуем ключи из приватных обратно в публичные
                 return [
                     Vacancy(
-                        title=data["_title"],
-                        url=data["_url"],
-                        salary=data["_salary"],
-                        description=data["_description"],
+                        title=data["_Vacancy__title"],
+                        url=data["_Vacancy__url"],
+                        salary=data["_Vacancy__salary"],
+                        description=data["_Vacancy__description"]
                     )
                     for data in json.load(f)
                 ]
             except json.JSONDecodeError:
-                print("Ошибка чтения JSON файла. Он может быть поврежден или пуст.")
+                print("Ошибка чтения JSON-файла. Он может быть повреждён или пуст.")
                 return []
 
     def delete(self, vacancy_title: str) -> None:
-        """Удаляет вакансию по названию."""
+        """Удаляет вакансию по названию из JSON-файла."""
         vacancies = self.load()
 
         vacancies = [vacancy for vacancy in vacancies if vacancy.title != vacancy_title]
 
         with open(self._file_path, "w", encoding="utf-8") as f:
             json.dump(
-                [{slot: getattr(vacancy, slot) for slot in Vacancy.__slots__} for vacancy in vacancies],
+                [
+                    {
+                        "_Vacancy__title": vacancy.title,
+                        "_Vacancy__url": vacancy.url,
+                        "_Vacancy__salary": vacancy.salary,
+                        "_Vacancy__description": vacancy.description
+                    }
+                    for vacancy in vacancies
+                ],
                 f,
                 ensure_ascii=False,
-                indent=4,
+                indent=4
             )

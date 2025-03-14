@@ -1,37 +1,40 @@
 from typing import Optional
 
 
+from typing import Optional
+
+
 class Vacancy:
     """Класс для представления вакансии."""
 
-    __slots__ = ("_title", "_url", "_salary", "_description")
+    __slots__ = ("__title", "__url", "__salary", "__description")
 
     def __init__(self, title: str, url: str, salary: Optional[str], description: str) -> None:
         """Инициализирует объект вакансии с приватными атрибутами."""
-        self._title = title
-        self._url = url
-        self._salary = self._validate_salary(salary)
-        self._description = description
+        self.__title = title
+        self.__url = url
+        self.__salary = self.__validate_salary(salary)
+        self.__description = description
 
     @property
     def title(self) -> str:
         """Возвращает название вакансии."""
-        return self._title
+        return self.__title
 
     @property
     def url(self) -> str:
         """Возвращает URL вакансии."""
-        return self._url
+        return self.__url
 
     @property
     def salary(self) -> str:
         """Возвращает информацию о зарплате."""
-        return self._salary
+        return self.__salary
 
     @property
     def description(self) -> str:
         """Возвращает описание вакансии."""
-        return self._description
+        return self.__description
 
     def __repr__(self) -> str:
         """Возвращает строковое представление вакансии."""
@@ -42,6 +45,7 @@ class Vacancy:
         return (self.salary or 0) < (other.salary or 0)
 
     def __eq__(self, other: object) -> bool:
+        """Сравнивает два объекта Vacancy на равенство."""
         if not isinstance(other, Vacancy):
             return NotImplemented
         return (
@@ -52,7 +56,7 @@ class Vacancy:
         )
 
     @staticmethod
-    def _validate_salary(salary: Optional[dict]) -> str:
+    def __validate_salary(salary: Optional[dict]) -> str:
         """Валидация и форматирование данных о зарплате."""
         if not salary:
             return "Зарплата не указана"
