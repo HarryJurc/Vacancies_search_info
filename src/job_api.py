@@ -24,8 +24,6 @@ class HeadHunterAPI(JobAPI):
     """Класс для работы с API hh.ru."""
 
     def __init__(self):
-        load_dotenv()
-        print(os.getenv("BASE_URL"))
         self.url = os.getenv("BASE_URL")
         if not self.url:
             raise ValueError("Переменная окружения 'BASE_URL' не установлена.")
