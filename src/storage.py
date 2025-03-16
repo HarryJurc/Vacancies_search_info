@@ -30,8 +30,8 @@ class JSONVacancyStorage(VacancyStorage):
 
     def __init__(self, file_path: str = "data/vacancies.json"):
         """Инициализирует экземпляр с указанным файлом."""
-        self._file_path = file_path
-        directory = os.path.dirname(self._file_path)
+        self.__file_path = file_path
+        directory = os.path.dirname(self.__file_path)
         if directory:
             os.makedirs(directory, exist_ok=True)
 
@@ -41,7 +41,7 @@ class JSONVacancyStorage(VacancyStorage):
         new_vacancies = {v.title: v for v in existing_vacancies}
         for vacancy in vacancies:
             new_vacancies[vacancy.title] = vacancy
-        with open(self._file_path, "w", encoding="utf-8") as f:
+        with open(self.__file_path, "w", encoding="utf-8") as f:
             json.dump(
                 [
                     {
@@ -57,9 +57,9 @@ class JSONVacancyStorage(VacancyStorage):
 
     def load(self) -> List[Vacancy]:
         """Загружает список вакансий из JSON-файла."""
-        if not os.path.exists(self._file_path) or os.path.getsize(self._file_path) == 0:
+        if not os.path.exists(self.__file_path) or os.path.getsize(self.__file_path) == 0:
             return []
-        with open(self._file_path, "r", encoding="utf-8") as f:
+        with open(self.__file_path, "r", encoding="utf-8") as f:
             try:
                 return [
                     Vacancy(
@@ -80,7 +80,7 @@ class JSONVacancyStorage(VacancyStorage):
 
         vacancies = [vacancy for vacancy in vacancies if vacancy.title != vacancy_title]
 
-        with open(self._file_path, "w", encoding="utf-8") as f:
+        with open(self.__file_path, "w", encoding="utf-8") as f:
             json.dump(
                 [
                     {

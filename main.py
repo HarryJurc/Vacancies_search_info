@@ -1,7 +1,10 @@
+from dotenv import load_dotenv
+
 from src.job_api import HeadHunterAPI
 from src.storage import JSONVacancyStorage
 from src.vacancy import Vacancy
 
+load_dotenv()
 
 def user_interface() -> None:
     """Функция для взаимодействия с пользователем."""
